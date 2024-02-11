@@ -1,84 +1,12 @@
 #!/usr/bin/env python3
 
-from tkinter import Tk, BOTH, Canvas
-from time import sleep
+from graphics import Window, Point
+from cell import Cell
+from maze import Maze
 
-class Point:
-    def __init__(self, x: int, y: int):
-        self.x=x
-        self.y=y
-class Line:
-    def __init__(self, a: Point, b: Point):
-        self.point_a=a
-        self.point_b=b
-    def draw(self, canvas, fill_color: str):
-        canvas.create_line(self.point_a.x, self.point_a.y, self.point_b.x, self.point_b.y, fill=fill_color, width=2)
-
-class Window:
-    def __init__(self, width,height):
-        self.width=width
-        self.height=height
-        self.__root=Tk()
-        self.__root.title="aMAZEing"
-        self.__canvas=Canvas(self.__root)
-        self.__canvas.pack()
-        self.running=False
-    def redraw(self):
-        self.__root.update_idletasks()
-        self.__root.update()
-    def wait_for_close(self):
-        self.running=True
-        while self.running:
-            self.redraw()
-            sleep(.25)
-    def close(self):
-        self.running=False
-        self.__root.protocol("WM_DELETE_WINDOW", self.close)
-    def draw_line(self, line: Line, fill_color: str):
-        line.draw(self.__canvas, fill_color)
-
-class Cell:
-    def __init__(self, p1: Point, p2: Point, window: Window):
-        self._x1=p1.x
-        self._y1=p1.y
-        self._x2=p2.x
-        self._y2=p2.y
-        self._win=window
-        self.has_left_wall = False
-        self.has_right_wall = False
-        self.has_top_wall = False
-        self.has_bottom_wall = False
-        self.color="black"
-
-    def draw(self, top_left: Point, bottom_right: Point):
-        if self.has_left_wall:
-            left_wall=Line(Point(top_left.x, top_left.y), Point(top_left.x, bottom_right.y))
-            self._win.draw_line(left_wall, self.color)
-        if self.has_right_wall:
-            right_wall=Line(Point(bottom_right.x, top_left.y), Point(bottom_right.x, bottom_right.y))
-            self._win.draw_line(right_wall, self.color)
-        if self.has_top_wall:
-            top_wall=Line(Point(top_left.x, top_left.y), Point(bottom_right.x, top_left.y))
-            self._win.draw_line(top_wall, self.color)
-        if self.has_bottom_wall:
-            bottom_wall=Line(Point(top_left.x, bottom_right.y), Point(bottom_right.x, bottom_right.y))
-            self._win.draw_line(bottom_wall, self.color)
-
-    def draw_move(self, to_cell, undo=False):
-        p1=Point(self._x1+((self._x2-self._x1)/2), self._y1+((self._y2-self._y1)/2))
-
-        p2=Point(to_cell._x1+((to_cell._x2-to_cell._x1)//2), to_cell._y1+((to_cell._y2-to_cell._y1)//2))
-
-        if undo:
-            self.color="gray"
-        else:
-            self.color="red"
-        nl=Line(p1,p2)
-        self._win.draw_line(nl,self.color)
-
-
-def main():
-    win=Window(800,600)
+def test_draw(passed_window):
+    win=passed_window
+    ## Testing stuff
     l1=Line(Point(10,10), Point(100,300))
     l2=Line(Point(10,300), Point(300,10))
     win.draw_line(l1, "orange")
@@ -92,14 +20,28 @@ def main():
     c1.color="green"
     c1.draw(Point(100, 100), Point(200, 200))
 
-
     c2=Cell(Point(50, 50), Point(80, 80), win)
     c2.has_left_wall=True
     c2.has_right_wall=True
-    c2.color="green"
+    c2.color="black"
     c2.draw(Point(50, 50), Point(80, 80))
 
     c1.draw_move(c2,True)
+
+def main():
+    win=Window(800,600)
+    #test_draw(win)
+
+    num_rows = 12
+    num_cols = 16
+    margin = 50
+    screen_x = 800
+    screen_y = 600
+    cell_size_x = (screen_x - 2 * margin) / num_cols
+    cell_size_y = (screen_y - 2 * margin) / num_rows
+    win = Window(screen_x, screen_y)
+
+    maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win)
 
     win.wait_for_close()
 
