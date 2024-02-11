@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from tkinter import Tk, BOTH, Canvas
 from time import sleep
 
@@ -5,7 +7,6 @@ class Point:
     def __init__(self, x: int, y: int):
         self.x=x
         self.y=y
-
 class Line:
     def __init__(self, a: Point, b: Point):
         self.point_a=a
@@ -48,6 +49,7 @@ class Cell:
         self.has_top_wall = False
         self.has_bottom_wall = False
         self.color="black"
+
     def draw(self, top_left: Point, bottom_right: Point):
         if self.has_left_wall:
             left_wall=Line(Point(top_left.x, top_left.y), Point(top_left.x, bottom_right.y))
@@ -62,11 +64,24 @@ class Cell:
             bottom_wall=Line(Point(top_left.x, bottom_right.y), Point(bottom_right.x, bottom_right.y))
             self._win.draw_line(bottom_wall, self.color)
 
+    def draw_move(self, to_cell, undo=False):
+        p1=Point(self._x1+((self._x2-self._x1)/2), self._y1+((self._y2-self._y1)/2))
+
+        p2=Point(to_cell._x1+((to_cell._x2-to_cell._x1)//2), to_cell._y1+((to_cell._y2-to_cell._y1)//2))
+
+        if undo:
+            self.color="gray"
+        else:
+            self.color="red"
+        nl=Line(p1,p2)
+        self._win.draw_line(nl,self.color)
+
+
 def main():
     win=Window(800,600)
-    l1=Line(Point(10,10), Point(300,300))
+    l1=Line(Point(10,10), Point(100,300))
     l2=Line(Point(10,300), Point(300,10))
-    win.draw_line(l1, "red")
+    win.draw_line(l1, "orange")
     win.draw_line(l2, "blue")
 
     c1=Cell(Point(100, 100), Point(200, 200), win)
@@ -76,6 +91,16 @@ def main():
     c1.has_right_wall=True
     c1.color="green"
     c1.draw(Point(100, 100), Point(200, 200))
+
+
+    c2=Cell(Point(50, 50), Point(80, 80), win)
+    c2.has_left_wall=True
+    c2.has_right_wall=True
+    c2.color="green"
+    c2.draw(Point(50, 50), Point(80, 80))
+
+    c1.draw_move(c2,True)
+
     win.wait_for_close()
 
 main()
