@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from graphics import Window, Point
+from graphics import Window, Point, Line
 from cell import Cell
 from maze import Maze
 
@@ -29,14 +29,13 @@ def test_draw(passed_window):
     c1.draw_move(c2,True)
 
 def main():
-    win=Window(800,600)
-    #test_draw(win)
+    #win=Window(800,600)
 
     num_rows = 12
     num_cols = 16
     margin = 50
-    screen_x = 800
-    screen_y = 600
+    screen_x = 640
+    screen_y = 480
     cell_size_x = (screen_x - 2 * margin) / num_cols
     cell_size_y = (screen_y - 2 * margin) / num_rows
     win = Window(screen_x, screen_y)

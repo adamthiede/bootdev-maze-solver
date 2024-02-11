@@ -18,7 +18,7 @@ class Window:
         self.height=height
         self.__root=Tk()
         self.__root.title="aMAZEing"
-        self.__canvas=Canvas(self.__root)
+        self.__canvas=Canvas(self.__root, bg="darkgray", height=height, width=width)
         self.__canvas.pack()
         Button(self.__root, text="Quit", command=self.close).pack()
         self.running=False

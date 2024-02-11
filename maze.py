@@ -30,24 +30,21 @@ class Maze:
                 self._draw_cell(i, j)
 
     def _draw_cell(self, i, j):
-        if self.win is None:
-            return
         x_mod=self.x1+(i*self.cell_size_x)
         y_mod=self.y1+(j*self.cell_size_y)
-        x2_mod=self.x1+((i+1)*self.cell_size_x)
-        y2_mod=self.y1+((j+1)*self.cell_size_y)
+        x2_mod=x_mod+self.cell_size_x
+        y2_mod=y_mod+self.cell_size_y
+        p1=Point(x_mod,y_mod)
+        p2=Point(x2_mod,y2_mod)
+        self._cells[i][j].has_right_wall=True
+        self._cells[i][j].has_bottom_wall=True
 
-        p1=Point(self.x1+x2_mod,self.y1+y2_mod)
-        p2=Point(self.x1+x2_mod,self.y1+y2_mod)
-
-        c1=Cell(p1, p2, self.win)
-        c1.draw(p1, p2)
-
+        print(f"Drawing cell {i} {j}")
         self._cells[i][j].draw(p1, p2)
 
         self._animate()
 
     def _animate(self):
         self.win.redraw()
-        time.sleep(.05)
+        time.sleep(.005)
 
