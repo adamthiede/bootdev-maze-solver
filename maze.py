@@ -29,6 +29,8 @@ class Maze:
             for j in range(self.num_rows):
                 self._draw_cell(i, j)
 
+        self._break_entrance_and_exit()
+
     def _draw_cell(self, i, j):
         if self.win is None:
             return
@@ -38,8 +40,6 @@ class Maze:
         y2_mod=y_mod+self.cell_size_y
         p1=Point(x_mod,y_mod)
         p2=Point(x2_mod,y2_mod)
-        self._cells[i][j].has_right_wall=True
-        self._cells[i][j].has_bottom_wall=True
 
         print(f"Drawing cell {i} {j}")
         self._cells[i][j].draw(p1, p2)
@@ -49,4 +49,25 @@ class Maze:
     def _animate(self):
         self.win.redraw()
         time.sleep(.005)
+
+    def _break_entrance_and_exit(self):
+        p1=Point(self.x1, self.y1)
+        p2=Point(self.x1+self.cell_size_x, self.y1+self.cell_size_y)
+        self._cells[0][0].has_left_wall=False
+        self._cells[0][0].has_right_wall=False
+        self._cells[0][0].has_bottom_wall=False
+        self._cells[0][0].color="white"
+        self._cells[0][0].draw(p1, p2)
+        self._draw_cell(0,0)
+
+        p3=Point(self.x1+((self.num_cols-1)*self.cell_size_x), self.y1+((self.num_rows-1)*self.cell_size_y))
+        p4=Point(self.x1+(self.num_cols*self.cell_size_x), self.y1+(self.num_rows*self.cell_size_y))
+
+        self._cells[self.num_cols-1][self.num_rows-1].has_left_wall=False
+        self._cells[self.num_cols-1][self.num_rows-1].has_right_wall=False
+        self._cells[self.num_cols-1][self.num_rows-1].has_top_wall=False
+        self._cells[self.num_cols-1][self.num_rows-1].color="white"
+        self._cells[self.num_cols-1][self.num_rows-1].draw(p3, p4)
+
+        self._draw_cell(self.num_cols-1, self.num_rows-1)
 

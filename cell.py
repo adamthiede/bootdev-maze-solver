@@ -7,10 +7,10 @@ class Cell:
         self._x2=p2.x
         self._y2=p2.y
         self._win=window
-        self.has_left_wall = False
-        self.has_right_wall = False
-        self.has_top_wall = False
-        self.has_bottom_wall = False
+        self.has_left_wall = True
+        self.has_right_wall = True
+        self.has_top_wall = True
+        self.has_bottom_wall = True
         self.color="black"
 
     def draw(self, top_left: Point, bottom_right: Point):
