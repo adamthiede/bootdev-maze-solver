@@ -12,6 +12,7 @@ class Cell:
         self.has_top_wall = True
         self.has_bottom_wall = True
         self.color="black"
+        self.visited=False
 
     def draw(self, top_left: Point, bottom_right: Point):
         self._x1=top_left.x
