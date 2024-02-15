@@ -16,18 +16,15 @@ class Tests(unittest.TestCase):
             num_rows,
         )
     def test_maze_reset_cells_visited(self):
-        m1=Maze(0,0,10,10,10,10)
-        m1._break_walls_r(10,10)
+        m1=Maze(0,0, 10,10, 10,10)
         m1._reset_cells_visited()
         visited_count=0
         for c in m1._cells:
             for d in c:
-                if d.visited==True:
-                    visited_count+=1
-        self.assertEqual(
-                visited_count,
-                0,
-        )
+                self.assertEqual(
+                        d.visited,
+                        False,
+                        )
 
 if __name__ == "__main__":
     unittest.main()
